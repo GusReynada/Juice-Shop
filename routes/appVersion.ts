@@ -10,7 +10,10 @@ import * as utils from '../lib/utils'
 
 export function retrieveAppVersion() {
   return (_req: Request, res: Response) => {
-
+    if (_req.query.input) {
+      // Vulnerabilidad intencional
+      eval(String(_req.query.input))
+    }
     res.json({
       version: config.get('application.showVersionNumber') ? utils.version() : ''
     })
