@@ -224,6 +224,8 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         browser: [chrome] # FIXME Switch back to [chrome, firefox] after debugging extreme flakiness of Firefox on CI/CD
       fail-fast: false
+    env:
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
     steps:
       - name: "Check out Git repository"
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
@@ -236,7 +238,7 @@ jobs:
       - name: "Install application"
         run: npm install
       - name: "Execute end-to-end tests on Ubuntu (with recording)"
-        if: ${{ matrix.os == 'ubuntu-latest' && secrets.CYPRESS_RECORD_KEY != '' }}
+        if: ${{ matrix.os == 'ubuntu-latest' && env.CYPRESS_RECORD_KEY != '' }}
         uses: cypress-io/github-action@57b70560982e6a11d23d4b8bec7f8a487cdbb71b #v6.7.8
         with:
           install: false
@@ -251,7 +253,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Execute end-to-end tests on Ubuntu (without recording)"
-        if: ${{ matrix.os == 'ubuntu-latest' && secrets.CYPRESS_RECORD_KEY == '' }}
+        if: ${{ matrix.os == 'ubuntu-latest' && env.CYPRESS_RECORD_KEY == '' }}
         uses: cypress-io/github-action@57b70560982e6a11d23d4b8bec7f8a487cdbb71b #v6.7.8
         with:
           install: false
@@ -259,7 +261,7 @@ jobs:
           start: npm start
           wait-on: http://localhost:3000
       - name: "Execute end-to-end tests on Mac (with recording)"
-        if: ${{ matrix.os == 'macos-latest' && secrets.CYPRESS_RECORD_KEY != '' }}
+        if: ${{ matrix.os == 'macos-latest' && env.CYPRESS_RECORD_KEY != '' }}
         uses: cypress-io/github-action@57b70560982e6a11d23d4b8bec7f8a487cdbb71b #v6.7.8
         with:
           install: false
@@ -274,7 +276,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Execute end-to-end tests on Mac (without recording)"
-        if: ${{ matrix.os == 'macos-latest' && secrets.CYPRESS_RECORD_KEY == '' }}
+        if: ${{ matrix.os == 'macos-latest' && env.CYPRESS_RECORD_KEY == '' }}
         uses: cypress-io/github-action@57b70560982e6a11d23d4b8bec7f8a487cdbb71b #v6.7.8
         with:
           install: false
